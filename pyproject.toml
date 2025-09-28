@@ -1,7 +1,11 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
-name = "nam-explorer"
+name = "nam"
 version = "0.1.0"
-description = "Add your description here"
+description = "Machine learning nam package to train and explore existing nam models."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
@@ -12,3 +16,5 @@ dependencies = [
     "scikit-learn>=1.7.1",
     "torch>=2.7.1",
 ]
+[tool.hatch.build.targets.wheel]
+packages = ["src/nam"]

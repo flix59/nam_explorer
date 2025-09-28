@@ -1,5 +1,5 @@
 import torch
-from src.nam import NAM
+from src import NAM
 
 def train_nam():
     test_data = torch.randn(100, 5)  # Example test data
