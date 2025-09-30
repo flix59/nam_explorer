@@ -4,10 +4,8 @@ import torch
 import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
-from experiments.housing.components.nam_explanation import nam_explanation_text, make_nam_architecture_figure
-from experiments.housing.components.shape_function_plot import get_shape_function_values
+from nam import NAM, NAM_EXPLANATION, get_shape_function_values, make_nam_architecture_figure
 from experiments.housing.train_housing import train_nam
-from src import NAM
 from experiments.housing.dataset import HousingDataset  
 
 # --- Explanation & Architecture figure (add below your two Markdown lines) ---
@@ -26,11 +24,11 @@ with gr.Blocks() as demo:
     dataset = HousingDataset(csv_file=pwd / 'data/housing.csv')
     # --- Explanation & Architecture figure (add below your two Markdown lines) ---
 
-    gr.Markdown(nam_explanation_text)
+    gr.Markdown(NAM_EXPLANATION)
 
     model = NAM.load_model(pwd / "models/nam_housing_32_5.pth")
     model.eval()
-    values_cell = gr.State(get_shape_function_values(model, dataset))
+    values_cell = gr.State(get_shape_function_values(model, dataset.data[dataset.features].values, dataset.features, dataset.scaler))
 
     def get_shape_function_plot(feature: str):
         x_range, y = values_cell.value[feature]
@@ -64,7 +62,7 @@ with gr.Blocks() as demo:
         dataset = HousingDataset(csv_file=data.value, target_column=target_column)
         model, model_path = train_nam(Path(csv_file), hidden_dim=128, depth=3)
         train_status.value = f"Model trained and saved to {model_path}"
-        values_cell.value = get_shape_function_values(model, dataset)
+        values_cell.value = get_shape_function_values(model, dataset.data[dataset.features].values, dataset.features, dataset.scaler)
         plot_output.value = get_shape_function_plot(dataset.features[0])
         return gr.update(choices=dataset.features, value=dataset.features[0]), get_shape_function_plot(dataset.features[0]), train_status
     

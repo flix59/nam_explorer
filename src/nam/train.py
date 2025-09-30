@@ -1,5 +1,5 @@
 import torch
-from .nam import NAM
+from .model import NAM
 
 def train_nam(X, y, num_features, hidden_dim=32, depth=5, epochs=1000, lr=0.01, verbose=True):
     """

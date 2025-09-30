@@ -1,29 +1,35 @@
-# NAM Explorer
+# NAM - Neural Additive Models
 
-Neural Additive Models (NAM) library for interpretable machine learning with shape function visualization.
+A PyTorch library for building and visualizing Neural Additive Models (NAMs) - interpretable machine learning models that decompose predictions into individual feature contributions.
 
 ## Features
 
 - **Interpretable ML**: Build Neural Additive Models that decompose predictions into individual feature contributions
-- **Shape Functions**: Visualize how each feature affects the model's predictions
+- **Shape Function Visualization**: Plot and analyze how each feature affects predictions
+- **Architecture Diagrams**: Generate visual explanations of the NAM structure
 - **PyTorch-based**: Efficient training with automatic differentiation
 - **Model Persistence**: Save and load trained models
-- **Extensible API**: Easy to integrate into your ML workflows
+- **Easy to Use**: Simple API for training and inference
 
 ## Installation
 
 ```bash
-pip install nam-explorer
+pip install nam
 ```
 
-For visualization features (Gradio, Plotly):
+With visualization support (Gradio, Plotly):
 ```bash
-pip install nam-explorer[viz]
+pip install nam[viz]
 ```
 
-For development:
+With data processing support (pandas, scikit-learn):
 ```bash
-pip install nam-explorer[dev]
+pip install nam[data]
+```
+
+Install everything:
+```bash
+pip install nam[all]
 ```
 
 ## Quick Start
@@ -32,7 +38,7 @@ pip install nam-explorer[dev]
 
 ```python
 import torch
-from nam_explorer import NAM, train_nam
+from nam import NAM, train_nam
 
 # Prepare your data
 X = torch.randn(1000, 5)  # 1000 samples, 5 features
@@ -48,7 +54,7 @@ predictions = model(X)
 ### Using the Model
 
 ```python
-from nam_explorer import NAM
+from nam import NAM
 
 # Create model
 model = NAM(num_features=5, hidden_dim=32, depth=5)
@@ -65,22 +71,37 @@ loaded_model = NAM.load_model('my_nam_model.pth')
 
 ### Visualizing Shape Functions
 
-Each feature's contribution can be visualized by evaluating the corresponding shape function across its range:
+Use the built-in visualization tools to understand feature contributions:
 
 ```python
-import torch
+from nam import plot_shape_functions, get_shape_function_values
 import matplotlib.pyplot as plt
 
-# Get shape function for feature 0
-feature_idx = 0
-x_range = torch.linspace(-3, 3, 100).reshape(-1, 1)
-contributions = model.shape_functions[feature_idx](x_range)
+# Plot all shape functions
+figures = plot_shape_functions(model, X, feature_names=['f1', 'f2', 'f3', 'f4', 'f5'])
 
-plt.plot(x_range.numpy(), contributions.detach().numpy())
-plt.xlabel('Feature Value')
-plt.ylabel('Contribution to Prediction')
-plt.title(f'Shape Function for Feature {feature_idx}')
-plt.show()
+# Or get the raw values for custom plotting
+values = get_shape_function_values(model, X, feature_names=['f1', 'f2', 'f3', 'f4', 'f5'])
+for feature_name, (x_range, y_values) in values.items():
+    plt.figure()
+    plt.plot(x_range, y_values)
+    plt.title(f'Shape Function: {feature_name}')
+    plt.show()
+```
+
+### Architecture Visualization
+
+Generate publication-ready architecture diagrams:
+
+```python
+from nam import make_nam_architecture_figure
+
+fig = make_nam_architecture_figure(
+    feature_names=['feature1', 'feature2', 'feature3'],
+    example_inputs=[0.5, -1.2, 0.8],
+    example_outputs=[0.3, -0.5, 0.2]
+)
+fig.savefig('nam_architecture.png', dpi=300, bbox_inches='tight')
 ```
 
 ## What are Neural Additive Models?
@@ -135,7 +156,7 @@ Train a NAM model on your data.
 
 ## Contributing
 
-Contributions are welcome! Please open issues or pull requests at the [GitHub repository](https://github.com/yourusername/nam_explorer).
+Contributions are welcome! Please open issues or pull requests at the [GitHub repository](https://github.com/flix59/nam_explorer).
 
 ## License
 
@@ -146,10 +167,15 @@ This project is licensed under the MIT License. See [LICENSE.md](LICENSE.md) for
 If you use this library in your research, please cite:
 
 ```bibtex
-@software{nam_explorer,
-  title = {NAM Explorer: Neural Additive Models for Interpretable Machine Learning},
-  author = {Your Name},
+@software{nam,
+  title = {NAM: Neural Additive Models for Interpretable Machine Learning},
+  author = {Felix},
   year = {2025},
-  url = {https://github.com/yourusername/nam_explorer}
+  url = {https://github.com/flix59/nam_explorer}
 }
 ```
+
+## References
+
+Based on the Neural Additive Models paper:
+- Agarwal, R., Melnick, L., Frosst, N., Zhang, X., Lengerich, B., Caruana, R., & Hinton, G. E. (2021). Neural additive models: Interpretable machine learning with neural nets. *NeurIPS*.

@@ -4,7 +4,7 @@ import torch
 from torch import Tensor
 import pandas as pd
 from experiments.housing.dataset import HousingDataset
-from src import NAM
+from nam import NAM
 
 
 def plot_shape_functions(model: NAM, dataset: HousingDataset ):
