@@ -1,0 +1,58 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pytorch-nam"
+version = "0.1.0"
+description = "Neural Additive Models (NAM) library for interpretable machine learning with shape function visualization"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {file = "LICENSE.md"}
+authors = [
+    {name = "Felix", email = "felix@aipieper.de"}
+]
+keywords = ["neural additive models", "interpretable ml", "machine learning", "pytorch", "explainable ai"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "numpy>=1.24.0",
+    "torch>=2.0.0",
+    "matplotlib>=3.7.0",
+]
+
+[project.optional-dependencies]
+viz = [
+    "gradio>=5.0.0",
+    "plotly>=5.0.0",
+]
+data = [
+    "pandas>=2.0.0",
+    "scikit-learn>=1.3.0",
+]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+]
+all = [
+    "pytorch-nam[viz,data]",
+]
+
+[project.urls]
+Homepage = "https://github.com/flix59/nam_explorer"
+Repository = "https://github.com/flix59/nam_explorer"
+Issues = "https://github.com/flix59/nam_explorer/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/nam"]
